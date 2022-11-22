@@ -49,9 +49,8 @@ function Chat() {
     //   console.log(data);
     // });
     setUsers(user);
-    setChatroom(user[0]?.roomId)
+    setChatroom(user[0])
     socket.on("connect")
-    connectRooms(user[0])
     return () => {
       socket.off("connect");
       socket.off("disconnect");
@@ -66,7 +65,6 @@ function Chat() {
 
   useEffect(() => {
     connectRooms(chatRoom)
-    console.log("userChatrom", chatRoom)
   }, [chatRoom]);
 
   useEffect(() => {
