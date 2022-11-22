@@ -33,9 +33,9 @@
 }
 
 .contactCard.active {
-  background-color: var(--blue-100);
+  background-color: rgba(0, 213, 255, 0.192);
 }
 
 .contactCard.active:hover {
-  background-color: var(--blue-100);
+  background-color: rgba(0, 213, 255, 0.192);
 }

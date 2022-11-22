@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import Contacts from "./Contacts/Contacts";
+import './Chat.scss'
 const socket = io.connect("https://172.20.10.3:443");
 function Chat() {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -10,24 +11,47 @@ function Chat() {
   const [users, setUsers] = useState([]);
   const [chatRoom, setChatroom] = useState("");
   const [room, setRoom] = useState("");
-
+  const [activeUser, setActiveUser] = useState('');
   const uploadFile = useRef();
 
   const user = [
     {
-      name: "Ayush",
-      userid: "ayushID"
-    }
+      user: {
+        firstname: "ayush",
+        lastname: "papnai"
+      },
+      _id: "ayushID",
+      roomId: 'room1'
+    },
+    {
+      user: {
+        firstname: "Nik",
+        lastname: "Kolte"
+      },
+      _id: "nikId",
+      roomId: 'room2'
+    },
+    {
+      user: {
+        firstname: "ishan",
+        lastname: "div"
+      },
+      _id: "ishanID",
+      roomId: 'room3'
+    },
   ]
 
+  const roomTest = 'room3'
 
 
   useEffect(() => {
     // axios.get("https://172.20.10.3/test").then((data) => {
     //   console.log(data);
     // });
+    setUsers(user);
+    setChatroom(user[0]?.roomId)
     socket.on("connect")
-    socket.emit("socketid", user.userid)
+    connectRooms(user[0])
     return () => {
       socket.off("connect");
       socket.off("disconnect");
@@ -35,16 +59,15 @@ function Chat() {
     };
   }, []);
 
-  const connectRooms = () => {
-    console.log("kyu");
-
-    socket.on("connection", (soc) => {
-      console.log("room");
-      soc.join();
-    });
+  const connectRooms = (activeRoom) => {
+    console.log(activeRoom)
+    socket.emit("socketid", { userId: user[0]?._id, roomId: activeRoom?.roomId })
   };
 
-  useEffect(() => { }, [chatRoom]);
+  useEffect(() => {
+    connectRooms(chatRoom)
+    console.log("userChatrom", chatRoom)
+  }, [chatRoom]);
 
   useEffect(() => {
     socket.on("receive_message", (data) => {
@@ -53,17 +76,16 @@ function Chat() {
   }, [socket]);
 
   const sendMessage = (message) => {
-    socket.emit("pong", message);
+    socket.emit("pong", { room: roomTest, message });
+
   };
 
   return (
     <div className="chat-wrapper">
       <div className="clientslist">
         {
-          user.map(item => {
-            return <div>
-              {item.name}
-            </div>
+          users.map(subs => {
+            return <Contacts key={subs._id} active={chatRoom?.roomId === subs.roomId ? true : false} chatId={subs.roomId} setChatroom={setChatroom} user={subs} />
           })
         }
       </div>
