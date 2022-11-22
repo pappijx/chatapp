@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
-const socket = io.connect("http://172.20.10.3:443");
+const socket = io.connect("https://172.20.10.3:443");
 function Chat() {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [lastPong, setLastPong] = useState(null);
@@ -12,6 +12,9 @@ function Chat() {
   const uploadFile = useRef();
 
   useEffect(() => {
+    socket.on("connect");
+    socket.on("disconnect");
+    socket.on("pong");
     return () => {
       socket.off("connect");
       socket.off("disconnect");
@@ -37,7 +40,7 @@ function Chat() {
   }, [socket]);
 
   const sendMessage = (message) => {
-    console.log("message to be send", message);
+    socket.emit(message);
   };
 
   return (
