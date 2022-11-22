@@ -1,0 +1,41 @@
+.contactCard {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  overflow-x: hidden;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.contactCard:hover {
+  background-color: var(--blue-500);
+}
+
+.contactCard .img {
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: grey;
+}
+
+.contactCard .details {
+  display: flex;
+  flex-direction: column;
+}
+
+.contactCard .name {
+  font-size: 14px;
+  font-weight: 600;
+}
+.contactCard .status {
+}
+
+.contactCard.active {
+  background-color: var(--blue-100);
+}
+
+.contactCard.active:hover {
+  background-color: var(--blue-100);
+}

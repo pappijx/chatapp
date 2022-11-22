@@ -1,5 +1,7 @@
+import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
+import Contacts from "./Contacts/Contacts";
 const socket = io.connect("https://172.20.10.3:443");
 function Chat() {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -11,10 +13,21 @@ function Chat() {
 
   const uploadFile = useRef();
 
+  const user = [
+    {
+      name: "Ayush",
+      userid: "ayushID"
+    }
+  ]
+
+
+
   useEffect(() => {
-    socket.on("connect");
-    socket.on("disconnect");
-    socket.on("pong");
+    // axios.get("https://172.20.10.3/test").then((data) => {
+    //   console.log(data);
+    // });
+    socket.on("connect")
+    socket.emit("socketid", user.userid)
     return () => {
       socket.off("connect");
       socket.off("disconnect");
@@ -31,21 +44,29 @@ function Chat() {
     });
   };
 
-  useEffect(() => {}, [chatRoom]);
+  useEffect(() => { }, [chatRoom]);
 
   useEffect(() => {
-    socket.on("recieve_message", (data) => {
+    socket.on("receive_message", (data) => {
       alert(data.message);
     });
   }, [socket]);
 
   const sendMessage = (message) => {
-    socket.emit(message);
+    socket.emit("pong", message);
   };
 
   return (
     <div className="chat-wrapper">
-      <div className="clientslist"></div>
+      <div className="clientslist">
+        {
+          user.map(item => {
+            return <div>
+              {item.name}
+            </div>
+          })
+        }
+      </div>
       <div className="chat-container">
         <div className="inputHolder">
           <input
