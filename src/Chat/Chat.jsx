@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
-const socket = io.connect("https://localhost:443");
+const socket = io.connect("http://172.20.10.3:443");
 function Chat() {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [lastPong, setLastPong] = useState(null);
@@ -19,18 +19,16 @@ function Chat() {
     };
   }, []);
 
-  const connectRooms = (roomName) => {
-    console.log("kyu", roomName);
+  const connectRooms = () => {
+    console.log("kyu");
 
     socket.on("connection", (soc) => {
       console.log("room");
-      soc.join(roomName);
+      soc.join();
     });
   };
 
-  useEffect(() => {
-
-  }, [chatRoom]);
+  useEffect(() => {}, [chatRoom]);
 
   useEffect(() => {
     socket.on("recieve_message", (data) => {
@@ -40,13 +38,11 @@ function Chat() {
 
   const sendMessage = (message) => {
     console.log("message to be send", message);
-    
   };
 
   return (
     <div className="chat-wrapper">
-      <div className="clientslist">
-      </div>
+      <div className="clientslist"></div>
       <div className="chat-container">
         <div className="inputHolder">
           <input
